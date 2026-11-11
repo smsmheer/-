@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="com.bateekh.superbateekh" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>سوبر بطيخ</name>
+    <description>لعبة منصات مصرية كوميدية: جري في حارة شعبية وقت المغربية واجمع الجبنة القريش</description>
+    <author email="dev@superbateekh.app" href="https://superbateekh.app">Super Bateekh Team</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="Orientation" value="landscape" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="DisallowOverscroll" value="true" />
+    <platform name="android">
+        <preference name="AndroidLaunchMode" value="singleTop" />
+        <icon src="res/icon.png" />
+    </platform>
+</widget>

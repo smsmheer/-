@@ -1,0 +1,10 @@
+{
+  "name": "super-bateekh",
+  "displayName": "سوبر بطيخ",
+  "version": "1.0.0",
+  "description": "لعبة منصات مصرية كوميدية",
+  "main": "index.html",
+  "author": "Super Bateekh Team",
+  "license": "MIT",
+  "cordova": {}
+}

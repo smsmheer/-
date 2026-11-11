@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#2a1a3a">
+<title>سوبر بطيخ 🍉</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:#1b1030;font-family:'Segoe UI',Tahoma,Arial,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
+#wrap{position:fixed;inset:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hidden{display:none!important}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(ellipse at 50% 30%,rgba(60,30,80,.82),rgba(20,10,40,.93));z-index:10;padding:20px;text-align:center}
+.logo{font-size:min(15vw,84px);font-weight:900;color:#ff4d5e;-webkit-text-stroke:3px #2e9e4f;text-shadow:0 4px 0 #1d6b35,0 8px 24px rgba(0,0,0,.5);letter-spacing:1px;transform:rotate(-3deg)}
+.tag{color:#ffd76e;font-size:min(4.5vw,20px);font-weight:700}
+.btn{min-width:min(70vw,300px);padding:14px 30px;font-size:min(5.5vw,24px);font-weight:800;color:#3a1d08;background:linear-gradient(#ffe08a,#ffb640);border:3px solid #7a4a12;border-radius:22px;box-shadow:0 5px 0 #7a4a12,0 10px 18px rgba(0,0,0,.4);cursor:pointer;transition:transform .08s;font-family:inherit}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #7a4a12}
+.btn.alt{background:linear-gradient(#c9f7c5,#7fd97f);box-shadow:0 5px 0 #2e7d32,0 10px 18px rgba(0,0,0,.4);border-color:#2e7d32}
+.btn.small{min-width:0;padding:10px 18px;font-size:min(4vw,18px)}
+.bank{background:#fff3;border:2px solid #ffd76e;color:#ffd76e;border-radius:16px;padding:6px 18px;font-weight:800;font-size:min(4.5vw,20px)}
+#hud{position:absolute;inset:0;pointer-events:none;z-index:5}
+#hudTop{position:absolute;top:calc(8px + env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:space-between;padding:0 14px;gap:8px}
+.pill{background:rgba(20,10,40,.65);border:2px solid #ffd76e;color:#fff;border-radius:18px;padding:6px 14px;font-weight:800;font-size:min(4.5vw,19px);white-space:nowrap}
+#touchBtns{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));left:0;right:0;display:flex;justify-content:space-between;padding:0 18px;pointer-events:none}
+.tbtn{pointer-events:auto;width:min(20vw,84px);height:min(20vw,84px);border-radius:50%;border:3px solid #fff;font-size:min(9vw,36px);background:rgba(255,255,255,.25);color:#fff;cursor:pointer}
+.tbtn:active{background:rgba(255,255,255,.5)}
+.cards{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:760px;max-height:58vh;overflow:auto}
+.card{width:150px;background:#fff1;border:3px solid #ffd76e;border-radius:16px;padding:10px;color:#fff}
+.card.sel{border-color:#7CFC00;box-shadow:0 0 14px #7CFC00}
+.card .em{font-size:44px}
+.card .nm{font-weight:900;font-size:18px;margin:4px 0}
+.card .ds{font-size:12px;min-height:44px;color:#ffe9b0}
+.card button{margin-top:6px;padding:6px 12px;border-radius:12px;border:none;font-weight:800;font-family:inherit;background:#ffb640;color:#3a1d08;cursor:pointer}
+.card button:disabled{background:#999;color:#555;cursor:default}
+.row{display:flex;gap:10px;align-items:center;background:#fff1;border-radius:14px;padding:10px 16px;color:#fff;font-weight:700;font-size:min(4.5vw,18px);width:min(80vw,360px);justify-content:space-between}
+.sw{width:56px;height:30px;border-radius:16px;border:2px solid #ffd76e;background:#666;cursor:pointer;position:relative;flex-shrink:0}
+.sw::after{content:'';position:absolute;top:2px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.15s}
+.sw.on{background:#2e9e4f}
+.sw.on::after{transform:translateX(-26px)}
+.big{font-size:min(8vw,40px);font-weight:900;color:#fff}
+#toast{position:absolute;bottom:20%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:10px 22px;border-radius:14px;font-weight:700;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none;font-size:min(4.5vw,18px);white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="wrap">
+<canvas id="game"></canvas>
+
+<div id="hud" class="hidden">
+  <div id="hudTop">
+    <div class="pill" id="hudPlates">🧀 0</div>
+    <div class="pill" id="hudTimer">⏱ 60</div>
+    <div class="pill" id="hudHearts">❤️❤️❤️</div>
+  </div>
+  <div id="touchBtns">
+    <button class="tbtn hidden" id="btnShoot">🍅</button>
+    <button class="tbtn hidden" id="btnNitro">⚡</button>
+  </div>
+</div>
+
+<div id="menu" class="screen">
+  <div class="logo">سوبر بطيخ</div>
+  <div class="tag">🏃‍♂️ جري في حارة مصرية وقت المغربية 🌆</div>
+  <button class="btn" id="bPlay">🍉 ابدأ الرحلة</button>
+  <button class="btn alt" id="bChars">🎭 شخصيات الحارة</button>
+  <button class="btn alt" id="bSet">⚙️ الإعدادات</button>
+  <button class="btn" id="bQuit">🚪 خروج</button>
+  <div class="bank">🧀 <span id="menuBank">0</span> طبق جبنة قريش</div>
+</div>
+
+<div id="chars" class="screen hidden">
+  <div class="big">🎭 شخصيات الحارة</div>
+  <div class="bank">🧀 <span id="charBank">0</span> طبق جبنة قريش</div>
+  <div class="cards" id="cards"></div>
+  <button class="btn small" id="bCharsBack">⬅ رجوع</button>
+</div>
+
+<div id="set" class="screen hidden">
+  <div class="big">⚙️ الإعدادات</div>
+  <div class="row"><span>🔊 المؤثرات الصوتية</span><div class="sw on" id="swSound"></div></div>
+  <div class="row"><span>🎵 الموسيقى</span><div class="sw on" id="swMusic"></div></div>
+  <div class="row"><span>✨ جودة عالية</span><div class="sw on" id="swQual"></div></div>
+  <button class="btn small" id="bReset" style="background:linear-gradient(#ff9a9a,#e05050);border-color:#7a1212;box-shadow:0 5px 0 #7a1212">🗑 مسح التقدم</button>
+  <button class="btn small" id="bSetBack">⬅ رجوع</button>
+</div>
+
+<div id="over" class="screen hidden">
+  <div class="big" id="overTitle">🎉 ألف مبروك!</div>
+  <div class="tag" id="overMsg"></div>
+  <div class="bank">🧀 جمعت <span id="overPlates">0</span> طبق</div>
+  <button class="btn" id="bAgain">🔁 العب تاني</button>
+  <button class="btn alt" id="bMenu2">🏠 القائمة الرئيسية</button>
+</div>
+
+<div id="toast"></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
